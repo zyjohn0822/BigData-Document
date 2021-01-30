@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+
+<!-- Put site-specific property overrides in this file. -->
+
+<!-- hadoop 核心配置文件 知道吗 -->
+<configuration>
+    <property>  
+        <name>fs.defaultFS</name>  
+        <value>hdfs://cluster</value>
+        <description>hadoop ha 部署方式下namenode访问地址，cluster是名字可自定义，后面hdfs-site.xml会用到</description>
+    </property>  
+    <property>  
+        <name>hadoop.tmp.dir</name>  
+        <value>/opt/software/hadoop/tmp</value>
+        <description>指定hadoop临时目录</description>
+    </property>  
+    <property>  
+        <name>ha.zookeeper.quorum</name>  
+        <value>hadoop02:2181,hadoop03:2181,hadoop04:2181</value>
+        <description>指定zookeeper地址</description>
+    </property>
+    <property>   
+        <name>ha.zookeeper.session-timeout.ms</name>   
+        <value>300000</value>
+        <description>zk的超时时间，单位为毫秒，默认为5000，这个值比较小。建议设置得大一些，zk过于敏感，避免因为网路抖动等原因引起NameNode进行无所谓的主备切换</description>
+    </property>
+    <property>  
+        <name>fs.trash.interval</name>  
+        <value>1440</value>  
+        <description>开启垃圾回收站功能，防止误删除文件，HDFS文件删除后先放入回收站，单位为分，垃圾回收站最长保留数据时间为1天，超过一天后删除</description>
+    </property>  
+    <property>    
+        <name>io.file.buffer.size</name>    
+        <value>131072</value> 
+        <description>设置SequenceFile中用到的读/写缓存大小，合理设置缓存大小有利于提高数据传输效率，单位为byte，默认为4KB，这里设置为128KB</description>      
+    </property>
+	<property>    
+        <name>hadoop.http.staticuser.user</name>    
+        <value>root</value>    
+    </property>
+	<property>    
+        <name>dfs.permissions.enabled</name>    
+        <value>false</value>
+    </property>
+</configuration>

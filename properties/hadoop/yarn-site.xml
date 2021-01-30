@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+<!-- 分布式资源管理系统Yarn配置文件 -->
+<configuration>
+    <!-- 日志聚合功能yarn.log  start --> 
+    <property>   
+        <name>yarn.log-aggregation-enable</name>   
+        <value>true</value>   
+        <description>开启日志聚合功能，默认为false</description>
+    </property>         
+    <property>   
+        <name>yarn.log-aggregation.retain-seconds</name>   
+        <value>259200</value>   
+        <description>在HDFS上聚合的日志最长保留多少秒，这里配置为3天</description>
+    </property> 
+    <!-- 日志聚合功能yarn.log  end --> 
+
+    <!-- 配置resourcemanager  start
+         在YARN中，ResourceManager负责集群中所有资源的统一管理和分配，
+         它接收来自各个节点（NodeManager）的资源汇报信息，
+         并把这些信息按照一定的策略分配给各个应用程序（实际上是ApplicationManager）
+    -->
+    <property>  
+       <name>yarn.resourcemanager.ha.enabled</name>  
+       <value>true</value>  
+       <description>开启resourcemanager ha，默认为false</description>
+    </property>  
+    <property>  
+       <name>yarn.resourcemanager.cluster-id</name>  
+       <value>yrc</value>  
+       <description></description>
+    </property>  
+    <property>  
+       <name>yarn.resourcemanager.ha.rm-ids</name>  
+       <value>rm1,rm2</value>  
+       <description></description>
+    </property>  
+    <property>  
+       <name>yarn.resourcemanager.hostname.rm1</name>  
+       <value>hadoop01</value>  
+       <description></description>
+    </property>     
+    <property>  
+       <name>yarn.resourcemanager.hostname.rm2</name>  
+       <value>hadoop02</value>  
+       <description></description>
+    </property>  
+    <property>  
+       <name>yarn.resourcemanager.zk-address</name>  
+       <value>hadoop02:2181,hadoop03:2181,hadoop04:2181</value>  
+       <description></description>
+    </property>  
+    <!-- 配置resourcemanager  end -->
+
+    <!-- 配置nodemanager  start
+         NodeManager是运行在单个节点上的代理，它管理Hadoop集群中单个计算节点
+    -->
+    <property>  
+       <name>yarn.nodemanager.aux-services</name>  
+       <value>mapreduce_shuffle</value>  
+    </property> 
+    <property>    
+        <name>yarn.nodemanager.aux-services.mapreduce.shuffle.class</name>    
+        <value>org.apache.hadoop.mapred.ShuffleHandler</value>    
+    </property>
+    <!-- 配置nodemanager  end -->
+	
+	<property>
+        <name>yarn.resourcemanager.scheduler.class</name>
+        <value>org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler</value>
+        <description>配置Yarn使用的调度器插件类名；Fair Scheduler对应的是：org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler</description>
+    </property>
+	<property>
+       <name>yarn.nodemanager.pmem-check-enabled</name>
+       <value>false</value>
+    </property>
+    <property>
+      <name>yarn.nodemanager.vmem-check-enabled</name>
+     <value>false</value>
+    </property>
+	<property>
+      <name>yarn.nodemanager.resource.memory-mb</name>
+     <value>40960</value>
+    </property>
+</configuration>

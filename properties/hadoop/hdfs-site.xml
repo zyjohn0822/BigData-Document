@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+
+<!-- Put site-specific property overrides in this file. -->
+
+<!-- hadoop 分布式文件系统hdfs配置文件 -->
+<configuration>
+    <property>  
+        <name>dfs.nameservices</name>  
+        <value>cluster</value>
+        <description>指定hdfs的nameservice为cluster，需要和core-site.xml文件中的保持一致</description>
+    </property>  
+    <property>  
+        <name>dfs.ha.namenodes.cluster</name>  
+        <value>nn1,nn2</value>
+        <description>cluster下有两个NameNode，分别为node1和node2</description>
+    </property>
+
+    <property>  
+        <name>dfs.namenode.rpc-address.cluster.nn1</name>  
+        <value>hadoop01:9000</value>
+        <description>NameNode1的RPC通信地址，端口要和core-site.xml中fs.defaultFS的一致</description>
+    </property>  
+    <property>  
+        <name>dfs.namenode.http-address.cluster.nn1</name>  
+        <value>hadoop01:50070</value>
+        <description>NameNode1的HTTP通信地址</description>
+    </property>  
+
+    <property>  
+        <name>dfs.namenode.rpc-address.cluster.nn2</name>  
+        <value>hadoop02:9000</value>
+        <description>NameNode2的RPC通信地址，端口要和core-site.xml中fs.defaultFS的一致</description>
+    </property>  
+    <property>  
+        <name>dfs.namenode.http-address.cluster.nn2</name>  
+        <value>hadoop02:50070</value>
+        <description>NameNode2的HTTP通信地址</description>
+    </property>  
+
+    <property>  
+        <name>dfs.namenode.shared.edits.dir</name>  
+        <value>qjournal://hadoop02:8485;hadoop03:8485;hadoop04:8485/cluster</value>
+        <description>指定NameNode的元数据在JournalNode上的存放位置</description>
+    </property>  
+    <property>  
+        <name>dfs.journalnode.edits.dir</name>  
+        <value>/opt/software/hadoop/journaldata</value>
+        <description>指定NameNode的元数据在JournalNode上的存放位置</description>
+    </property>  
+
+    <property>  
+        <name>dfs.ha.automatic-failover.enabled</name>  
+        <value>true</value>
+        <description>指定支持高可用自动切换机制</description>
+    </property>  
+    <property>  
+        <name>dfs.client.failover.proxy.provider.cluster</name>  
+        <value>org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider</value>
+        <description>配置失败自动切换实现方式</description>
+    </property>  
+
+    <property>  
+        <name>dfs.ha.fencing.methods</name>  
+        <value>  
+            sshfence  
+            shell(/bin/true)  
+        </value>
+        <description>配置隔离机制,主要用于远程管理监听其他机器相关服务</description>
+    </property>  
+    <property>  
+        <name>dfs.ha.fencing.ssh.private-key-files</name>  
+        <value>/root/.ssh/id_rsa</value>
+        <description>使用隔离机制时需要ssh免密码登陆，/home/hadoop/为用户目录</description>
+    </property>  
+    <property>  
+        <name>dfs.ha.fencing.ssh.connect-timeout</name>  
+        <value>30000</value>
+        <description>使用隔离机制时需要ssh免密码登陆时的超时时间，单位为毫秒</description>
+    </property>
+
+    <property>
+        <name>dfs.namenode.name.dir</name>
+        <value>file:/opt/software/hadoop/tmp/dfs/name</value>
+        <description>NameNode结点存储hadoop文件系统信息的本地系统路径</description>
+    </property>
+    <property>
+        <name>dfs.datanode.data.dir</name>
+        <value>file:/opt/software/hadoop/tmp/dfs/data</value>
+        <description>DataNode结点被指定要存储数据的本地文件系统路径，这个值只对NameNode有效，DataNode并不需要使用到它</description>
+    </property>
+
+    <property>   
+        <name>dfs.webhdfs.enabled</name>   
+        <value>true</value>
+        <description>指定可以通过web访问hdfs目录</description>
+    </property>
+    <!-- 这个地方是为Hbase的专用配置，最小为4096，表示同时处理文件的上限，不配置会报错 -->
+    <property>
+        <name>dfs.datanode.max.xcievers</name>
+        <value>4096</value>
+    </property>
+</configuration>
